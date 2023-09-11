@@ -25,6 +25,19 @@
     "RankType": "None",
     "PerMapRanking": false,
     "LeaderboardType": "None",
-    "ProjectTemplate": null
+    "ProjectTemplate": null,
+    "CsProjName": "",
+    "LaunchConfigs": [
+      {
+        "Name": "My New Config",
+        "GameIdent": "local.testlab#local",
+        "MapName": "test_lab.vmap",
+        "MaxPlayers": 1,
+        "GameSettings": {},
+        "Addons": "",
+        "PreLaunchCommand": "",
+        "PostLaunchCommand": ""
+      }
+    ]
   }
 }

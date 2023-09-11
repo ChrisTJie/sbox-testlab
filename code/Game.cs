@@ -1,5 +1,7 @@
 ﻿using Sandbox;
+using Sandbox.Diagnostics;
 using Sandbox.UI.Construct;
+
 using System;
 using System.IO;
 using System.Linq;
@@ -17,22 +19,23 @@ namespace Sandbox;
 /// You can use this to create things like HUDs and declare which player class
 /// to use for spawned players.
 /// </summary>
-public partial class MyGame : GameManager
+internal partial class MyGame : GameManager
 {
 	public MyGame()
 	{
+
 	}
 
 	/// <summary>
 	/// A client has joined the server. Make them a pawn to play with
 	/// </summary>
-	public override void ClientJoined( IClient client )
+	public override void ClientJoined( IClient cl )
 	{
-		base.ClientJoined( client );
+		base.ClientJoined( cl );
 
 		// Create a pawn for this client to play with
 		var pawn = new Pawn();
-		client.Pawn = pawn;
+		cl.Pawn = pawn;
 
 		// Get all of the spawnpoints
 		var spawnpoints = Entity.All.OfType<SpawnPoint>();

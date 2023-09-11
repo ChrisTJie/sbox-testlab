@@ -1,10 +1,13 @@
 ﻿using Sandbox;
+
 using System;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 
 namespace Sandbox;
 
-partial class Pawn : AnimatedEntity
+internal partial class Pawn : AnimatedEntity
 {
 	/// <summary>
 	/// Called when the entity is first created 
@@ -74,6 +77,7 @@ partial class Pawn : AnimatedEntity
 			ragdoll.Rotation = Rotation.LookAt( Vector3.Random.Normal );
 			ragdoll.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 			ragdoll.PhysicsGroup.Velocity = Rotation.Forward * 1000;
+			ragdoll.DeleteAsync( 10.0f );
 		}
 	}
 
@@ -95,5 +99,40 @@ partial class Pawn : AnimatedEntity
 
 		// Set the first person viewer to this, so it won't render our model
 		Camera.FirstPersonViewer = this;
+
+		RayTrace();
+	}
+
+	private void RayTrace()
+	{
+		TraceResult _trace_result = Trace.Ray( AimRay, 1000.0f ).Run();
+
+		if ( _trace_result.Hit )
+		{
+			DebugOverlay.ScreenText(
+				$"Entity: {_trace_result.Entity}.\n" +
+				$"Transform: {_trace_result.Entity.Transform}",
+				 new Vector2( 100.0f, 100.0f ), 0, Color.Random, default );
+
+			DebugOverlay.Sphere( _trace_result.EndPosition, 10.0f, Color.Random, default, true );
+		}
+
+		Vector3 directionOfStrike = Vector3.Forward * 100.0f /* some method to determine direction of strike */;
+		Vector3 correctDirection = Vector3.Right * 100.0f /* direction indicated by the arrow on the cube */;
+
+		DebugOverlay.Sphere( directionOfStrike, 100.0f, Color.Green, default, true );
+		DebugOverlay.Sphere( correctDirection, 100.0f, Color.Blue, default, true );
+
+		float dot = Vector3.Dot( directionOfStrike.Normal, correctDirection.Normal );
+		if ( dot > 0.9f ) // Check if the direction of the strike is within some threshold of the correct direction
+		{
+			// Correct strike direction
+		}
+		else
+		{
+			// Incorrect strike direction
+		}
+
+		DebugOverlay.ScreenText( $"{dot}", new Vector2( 100.0f, 100.0f ), 5, Color.Random, default );
 	}
 }
